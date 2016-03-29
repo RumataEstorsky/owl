@@ -1,0 +1,11 @@
+/database/
+logs
+target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+/conf/sql/initial-data.sql
+/tmp

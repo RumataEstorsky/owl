@@ -1,0 +1,27 @@
+
+#GET /test                                   controllers.TestController.sayHello
+
+# Task
+# Create (man)
+# Retrieve
+GET           /task                            controllers.TaskController.getTasks
+GET           /task/:id                        controllers.TaskController.show(id: Long)
+GET           /task/:id/day                    controllers.TaskController.dayStatistics(id: Long)
+#GET           /task                         controllers.TaskController.getComments(taskId: Int ?= -1, startDate ?= "", endDate ?= "")
+# Update  (man)
+# Remove (man)
+PATCH         /task/:id/freeze                 controllers.TaskController.freeze(id: Long)
+PATCH         /task/:id/unfreeze               controllers.TaskController.unfreeze(id: Long)
+PATCH         /task/:id/cost/:cost             controllers.TaskController.setCost(id: Long, cost: Double)
+
+GET           /score/:when                     controllers.TaskController.getScore(when: String)
+GET           /statistics/days                 controllers.TaskController.statisticsDays()
+GET           /statistics/diary/:day           controllers.TaskController.statisticsDay(day: String)
+
+
+# Diary
+PUT           /task/:taskId/exec/:count        controllers.TaskController.addExec(taskId: Long, count: Int)
+# Retrieve
+# Update (
+# Remove (later)
+DELETE        /task/:id/exec/:execId           controllers.TaskController.deleteExec(id: Long, execId: Long)
