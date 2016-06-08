@@ -52,8 +52,7 @@ class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO) extends Contr
 
   // TODO make pagination
   def statisticsDays() = Action.async {
-    // TODO Ok(toJson(items)))
-    taskDao.statisticsByDays.map(items => Ok(items.map{case (day, totalScore, execCount) => day + " " + totalScore}.mkString("\n")))
+    taskDao.statisticsByDays.map(items => Ok(toJson(items)))
   }
 
   def statisticsDay(day: String) = Action.async {

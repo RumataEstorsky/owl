@@ -3,6 +3,7 @@ package dao
 import javax.inject.Inject
 
 import models.Task
+import models.DaysProductivityView
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
@@ -43,7 +44,7 @@ class TaskDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
 
   // TODO remove plain sql where it possible
   def statisticsByDays = {
-    val q = sql"SELECT day, total_score, exec_count FROM days_productivity ORDER BY day".as[(String, Double, Int)]
+    val q = sql"SELECT * FROM days_productivity ORDER BY day".as[DaysProductivityView]
     db.run(q)
   }
 
