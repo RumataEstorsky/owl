@@ -29,9 +29,18 @@ CREATE OR REPLACE VIEW days_productivity
 AS
 SELECT date_trunc('day', ended_at)::date as day,
        sum(score) AS total_score,
-       count(score) AS exec_count
+       count(score) AS exec_count,
+       count(DISTINCT task_id) AS types_tasks_count
 FROM execs
 GROUP BY day;
+
+CREATE OR REPLACE VIEW tasks_stat
+AS
+SELECT id, name, a.*
+FROM tasks LEFT JOIN
+(SELECT task_id, SUM(score) AS sum_score, sum(count) AS sum_el, count(count) AS times, avg(count) AS avg_time
+FROM execs
+GROUP BY task_id) a ON tasks.id = a.task_id;
 
 
 --  select SUM(*) from execs where ended_at between DATE 'today' and DATE 'tomorrow';
