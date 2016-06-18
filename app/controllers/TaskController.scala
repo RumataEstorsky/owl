@@ -55,9 +55,14 @@ class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO) extends Contr
     res.map(e => Ok(e.toString))
   }
 
-  def statisticsDays() = Action.async {
-    taskDao.statisticsByDays.map(items => Ok(toJson(items)))
+  def annualStatistics() = Action.async {
+    taskDao.annualStatistics.map(items => Ok(toJson(items)))
   }
+
+  def annualStatisticsByTask(taskId: Long) = Action.async {
+    taskDao.annualStatisticsByTask(taskId).map(items => Ok(toJson(items)))
+  }
+
 
   def statisticsDay(day: String) = Action.async {
     execDao.forDay(LocalDate.parse(day)).map(execs => Ok(toJson(execs)))

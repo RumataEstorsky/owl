@@ -8,6 +8,8 @@ GET           /task                            controllers.TaskController.getTas
 GET           /task-stat                       controllers.TaskController.getTaskStatView
 GET           /task/:id                        controllers.TaskController.show(id: Long)
 GET           /task/:id/day                    controllers.TaskController.dayStatistics(id: Long)
+GET           /task/:id/days                   controllers.TaskController.annualStatisticsByTask(id: Long)
+
 #GET           /task                         controllers.TaskController.getComments(taskId: Int ?= -1, startDate ?= "", endDate ?= "")
 # Update  (man)
 # Remove (man)
@@ -16,7 +18,7 @@ PATCH         /task/:id/unfreeze               controllers.TaskController.unfree
 PATCH         /task/:id/cost/:cost             controllers.TaskController.setCost(id: Long, cost: Double)
 
 GET           /score/:when                     controllers.TaskController.getScore(when: String)
-GET           /statistics/days                 controllers.TaskController.statisticsDays()
+GET           /statistics/days                 controllers.TaskController.annualStatistics()
 GET           /statistics/diary/:day           controllers.TaskController.statisticsDay(day: String)
 
 
