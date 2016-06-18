@@ -10,9 +10,8 @@ object  DaysProductivityView {
   implicit val daysProductivityView: Format[DaysProductivityView] = Json.format[DaysProductivityView]
 }
 
-
-case class TaskStatView(taskId: Long, totalScore: Double, totalEl: Int, times: Int, avgTimes: Double)
+case class TaskStatView(id: Long, name: String, totalScore: Double, totalEl: Int, times: Int, avgTimes: Double, daysAgo: Int)
 object  TaskStatView {
-  implicit val getTaskStatViewResult = GetResult(r => TaskStatView(r.<<, r.<<, r.<<, r.<<, r.<<))
+  implicit val getTaskStatViewResult = GetResult(r => TaskStatView(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
   implicit val taskStatView: Format[TaskStatView] = Json.format[TaskStatView]
 }

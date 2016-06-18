@@ -2,8 +2,7 @@ package dao
 
 import javax.inject.Inject
 
-import models.Task
-import models.DaysProductivityView
+import models.{DaysProductivityView, Task, TaskStatView}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
@@ -18,6 +17,11 @@ class TaskDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
   private val Tasks = TableQuery[TasksTable]
 
   def activeList(): Future[Seq[Task]] = db.run(Tasks.filter(_.isFrozen === false).sortBy(_.name).result)
+
+  def activeTaskStatView(): Future[Seq[TaskStatView]] = {
+    val q = sql"""SELECT * FROM tasks_stat ORDER BY ago DESC""".as[TaskStatView]
+    db.run(q)
+  }
 
   def setFreeze(taskId: Long, isFreeze: Boolean): Future[Unit] = {
     val q = for { t <- Tasks if t.id === taskId } yield t.isFrozen

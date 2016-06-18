@@ -21,6 +21,11 @@ class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO) extends Contr
     taskDao.activeList().map { tasks => Ok(toJson(tasks)) }
   }
 
+  def getTaskStatView() = Action.async {
+    taskDao.activeTaskStatView().map { tasks => Ok(toJson(tasks)) }
+  }
+
+
   def freeze(id: Long) = Action.async {
     taskDao.setFreeze(id, true).map(_ => Accepted(id.toString))
   }
@@ -50,7 +55,6 @@ class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO) extends Contr
     res.map(e => Ok(e.toString))
   }
 
-  // TODO make pagination
   def statisticsDays() = Action.async {
     taskDao.statisticsByDays.map(items => Ok(toJson(items)))
   }

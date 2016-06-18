@@ -36,11 +36,24 @@ GROUP BY day;
 
 CREATE OR REPLACE VIEW tasks_stat
 AS
-SELECT id, name, a.*
+SELECT id, name, sum_score, sum_el, times, avg_time, ago
 FROM tasks LEFT JOIN
-(SELECT task_id, SUM(score) AS sum_score, sum(count) AS sum_el, count(count) AS times, avg(count) AS avg_time
+  (SELECT task_id,
+          SUM(score) AS sum_score,
+          SUM(count) AS sum_el,
+          COUNT(count) AS times,
+          ROUND(AVG(count), 2) AS avg_time,
+          CAST(CAST(now() AS date) - CAST(MAX(ended_at) AS date) AS INT) AS ago
 FROM execs
-GROUP BY task_id) a ON tasks.id = a.task_id;
+GROUP BY task_id) a ON tasks.id = a.task_id
+WHERE tasks.is_frozen = FALSE;
+
+
+CREATE OR REPLACE VIEW tasks_ago
+AS
+SELECT id, name, now()::date - last::date AS ago
+FROM tasks LEFT JOIN (SELECT task_id, max(ended_at) AS last FROM execs GROUP BY task_id) lasts ON tasks.id = lasts.task_id
+ORDER BY ago
 
 
 --  select SUM(*) from execs where ended_at between DATE 'today' and DATE 'tomorrow';

@@ -5,6 +5,7 @@
 # Create (man)
 # Retrieve
 GET           /task                            controllers.TaskController.getTasks
+GET           /task-stat                       controllers.TaskController.getTaskStatView
 GET           /task/:id                        controllers.TaskController.show(id: Long)
 GET           /task/:id/day                    controllers.TaskController.dayStatistics(id: Long)
 #GET           /task                         controllers.TaskController.getComments(taskId: Int ?= -1, startDate ?= "", endDate ?= "")
