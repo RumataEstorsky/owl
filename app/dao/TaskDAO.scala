@@ -54,10 +54,11 @@ class TaskDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
 
   def annualStatisticsByTask(taskId: Long) = {
     val q =
-      sql"""SELECT date_trunc('day', ended_at)::date as day, sum(score) AS total_score, count(score) AS exec_count, null
+      sql"""SELECT date_trunc('day', ended_at)::date as day, sum(score) AS total_score, sum(count) AS exec_count, null
             FROM execs
             GROUP BY task_id, day
-            HAVING task_id = #$taskId""".as[DaysProductivityView]
+            HAVING task_id = #$taskId
+            ORDER BY day""".as[DaysProductivityView]
     db.run(q)
   }
 

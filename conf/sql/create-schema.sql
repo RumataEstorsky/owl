@@ -29,7 +29,7 @@ CREATE OR REPLACE VIEW days_productivity
 AS
 SELECT date_trunc('day', ended_at)::date as day,
        sum(score) AS total_score,
-       count(score) AS exec_count,
+       sum(count) AS exec_count,
        count(DISTINCT task_id) AS types_tasks_count
 FROM execs
 GROUP BY day;
