@@ -8,4 +8,6 @@ target
 /.settings
 /RUNNING_PID
 /conf/sql/initial-data.sql
+/scripts
+/conf/sql/old-initial-data.sql
 /tmp
