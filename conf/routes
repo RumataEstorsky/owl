@@ -28,3 +28,6 @@ PUT           /task/:taskId/exec/:count        controllers.TaskController.addExe
 # Update (
 # Remove (later)
 DELETE        /task/:id/exec/:execId           controllers.TaskController.deleteExec(id: Long, execId: Long)
+
+
+GET /test   controllers.TaskController.test

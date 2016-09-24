@@ -2,17 +2,20 @@ package controllers
 
 import javax.inject.Inject
 
+import akka.actor.ActorSystem
 import org.joda.time.{DateTime, LocalDate}
 import dao.{ExecDAO, TaskDAO}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json.toJson
 import play.api.libs.json._
+import play.api.libs.ws.WSClient
+import play.api.libs.ws.ahc.AhcCurlRequestLogger
 import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
 
 // TODO add module and integration tests
-class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO) extends Controller {
+class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO, sys: ActorSystem) extends Controller {
   val InvalidJsonFuture = Future.successful(BadRequest(Json.obj("result" -> "Invalid JSON")))
 
   private def ItemNotFoundFuture(id: Long) = Future.successful(NotFound(Json.obj("result" -> "error", "message" -> JsString("Not found post with ID = " + id))))
@@ -79,5 +82,12 @@ class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO) extends Contr
   def setCost(id: Long, cost: Double) = TODO
 
   def deleteExec(id: Long, execId: Long) = TODO
+
+
+  def test = Action {
+    sys.actorSelection("akka://application/user/remind-schedule-actor") ! "and"
+
+    Ok("")
+  }
 
 }
