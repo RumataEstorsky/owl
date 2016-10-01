@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
+import actors.RemindScheduleActor.{GetClinetToken, SendTimeToClient}
 import akka.actor.ActorSystem
 import org.joda.time.{DateTime, LocalDate}
 import dao.{ExecDAO, TaskDAO}
@@ -85,9 +86,17 @@ class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO, sys: ActorSys
 
 
   def test = Action {
-    sys.actorSelection("akka://application/user/remind-schedule-actor") ! "and"
+    remindScheduleActor ! SendTimeToClient
 
     Ok("")
   }
+
+  def addToken(token: String) = Action {
+    remindScheduleActor ! GetClinetToken(token)
+
+    Ok("")
+  }
+
+  private def remindScheduleActor = sys.actorSelection("akka://application/user/remind-schedule-actor")
 
 }
