@@ -2,13 +2,14 @@ package dao
 
 import javax.inject.Inject
 
+import com.github.tototoshi.slick.PostgresJodaSupport._
 import models.Exec
 import org.joda.time.{DateTime, LocalDate}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
-import slick.driver.JdbcProfile
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import slick.driver.JdbcProfile
+
 import scala.concurrent.Future
-import com.github.tototoshi.slick.PostgresJodaSupport._
 
 
 class ExecDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {

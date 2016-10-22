@@ -12,7 +12,7 @@
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%coloredLevel %logger{15} - %message%n%xException{10}</pattern>
+      <pattern>%date [%thread] %coloredLevel %logger{15} - %message%n%xException{10}</pattern>
     </encoder>
   </appender>
 
@@ -27,11 +27,17 @@
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
   <logger name="slick.jdbc" level="DEBUG"/>
+  <!--<logger name="com.ning.http.client" level="DEBUG" />-->
+  <!--<logger name="play.api.libs.ws" level="DEBUG" />-->
 
 
   <root level="WARN">
     <appender-ref ref="ASYNCFILE" />
     <appender-ref ref="ASYNCSTDOUT" />
   </root>
+
+  <!--<root level="DEBUG">-->
+    <!--<appender-ref ref="STDOUT" />-->
+  <!--</root>-->
 
 </configuration>

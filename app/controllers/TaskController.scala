@@ -4,13 +4,11 @@ import javax.inject.Inject
 
 import actors.RemindScheduleActor.{GetClinetToken, SendTimeToClient}
 import akka.actor.ActorSystem
-import org.joda.time.{DateTime, LocalDate}
 import dao.{ExecDAO, TaskDAO}
+import org.joda.time.LocalDate
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json.toJson
 import play.api.libs.json._
-import play.api.libs.ws.WSClient
-import play.api.libs.ws.ahc.AhcCurlRequestLogger
 import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
@@ -28,7 +26,6 @@ class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO, sys: ActorSys
   def getTaskStatView() = Action.async {
     taskDao.activeTaskStatView().map { tasks => Ok(toJson(tasks)) }
   }
-
 
   def freeze(id: Long) = Action.async {
     taskDao.setFreeze(id, true).map(_ => Accepted(id.toString))
@@ -97,6 +94,7 @@ class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO, sys: ActorSys
     Ok("")
   }
 
-  private def remindScheduleActor = sys.actorSelection("akka://application/user/remind-schedule-actor")
+  private def remindScheduleActor = sys.actorSelection("*/remind-schedule-actor")
+//  private def remindScheduleActor = sys.actorOf(RemindScheduleActor.props)
 
 }
