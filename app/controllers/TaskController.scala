@@ -16,8 +16,7 @@ import scala.concurrent.Future
 // TODO add module and integration tests
 class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO, sys: ActorSystem) extends Controller {
   val InvalidJsonFuture = Future.successful(BadRequest(Json.obj("result" -> "Invalid JSON")))
-
-  private def ItemNotFoundFuture(id: Long) = Future.successful(NotFound(Json.obj("result" -> "error", "message" -> JsString("Not found post with ID = " + id))))
+  private def ItemNotFoundFuture(id: Long) = Future.successful(NotFound(Json.obj("result" -> "error", "message" -> s"Not found post with ID = $id.")))
 
   def getTasks() = Action.async {
     taskDao.activeList().map { tasks => Ok(toJson(tasks)) }
@@ -40,7 +39,7 @@ class TaskController @Inject()(taskDao: TaskDAO, execDao: ExecDAO, sys: ActorSys
       maybeTask.fold {
         ItemNotFoundFuture(taskId)
       } { task =>
-        execDao.createNew(taskId, count, task.cost).map(inserted => Created(toJson(inserted)))
+        execDao.createNew(task, count, task.cost).map(inserted => Created(toJson(inserted)))
       }
     }
   }

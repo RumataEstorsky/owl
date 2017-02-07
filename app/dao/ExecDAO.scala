@@ -3,16 +3,17 @@ package dao
 import javax.inject.Inject
 
 import com.github.tototoshi.slick.PostgresJodaSupport._
-import models.Exec
+import models.{Exec, Task}
 import org.joda.time.{DateTime, LocalDate}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import services.AchievementService
 import slick.driver.JdbcProfile
 
 import scala.concurrent.Future
 
 
-class ExecDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[JdbcProfile] {
+class ExecDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, achievementService: AchievementService) extends HasDatabaseConfigProvider[JdbcProfile] {
 
   import driver.api._
 
@@ -35,8 +36,9 @@ class ExecDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     db.run(execList)
   }
 
-  def createNew(taskId: Long, count: Int, cost: Double): Future[Exec] = {
-    val execToInsert = Exec(taskId = taskId, score = count * cost, count = count, endedAt = new DateTime())
+  def createNew(task: Task, count: Int, cost: Double): Future[Exec] = {
+    val score = achievementService.getScope(task, count)
+    val execToInsert = Exec(taskId = task.id.get, score = score, count = count, endedAt = new DateTime())
     val insertQuery = Execs returning Execs.map(_.id) into ((execToInsert, id) => execToInsert.copy(id = Some(id)))
     db.run(insertQuery += execToInsert)
   }

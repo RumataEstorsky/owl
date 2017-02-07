@@ -44,7 +44,7 @@ class RemindScheduleActor @Inject()(ws: WSClient, conf: play.api.Configuration, 
   }
 
   override def preStart() = {
-    context.system.scheduler.schedule(0 milliseconds, 60 minutes, self, SendTimeToClient)
+//    context.system.scheduler.schedule(0 milliseconds, 60 minutes, self, SendTimeToClient)
   }
 
 

@@ -12,3 +12,4 @@ target
 /conf/sql/old-initial-data.sql
 /tmp
 /conf/develop.conf
+/docs
