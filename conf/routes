@@ -32,3 +32,5 @@ DELETE        /task/:id/exec/:execId           controllers.TaskController.delete
 
 GET           /test                            controllers.TaskController.test
 GET           /add-token/:token                controllers.TaskController.addToken(token: String)
+
+GET           /version                         controllers.MainController.version

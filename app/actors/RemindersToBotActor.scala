@@ -47,12 +47,12 @@ class RemindersToBotActor @Inject()( bot: OwlTelegramBot) extends Actor {
     import cronish.dsl._
     import scalendar._
     val now = Scalendar.now
-    readReminders.toList.map { case (time, message) =>
+    val cancellables = readReminders.toList.map { case (time, message) =>
       val cron = time.cron
       val remains = cron.nextFrom(now)
       //println(s"$message: next start at ${cron.nextTime} remains ${remains / 1000 / 60} minutes")
-      val cancellable = context.system.scheduler.scheduleOnce(remains milliseconds, self, SendReminredToBot(message))
-      context.system.scheduler.maxFrequency
+      context.system.scheduler.scheduleOnce(remains milliseconds, self, SendReminredToBot(message))
     }
+    bot.sendSimpleMessage(s"The reminders have been refreshed, loaded ${cancellables.size} item(s).")
   }
 }

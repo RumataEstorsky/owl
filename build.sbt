@@ -1,8 +1,20 @@
 name := """owl"""
 
-version := "1.0-SNAPSHOT"
+version := "0.1.11"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file(".")).
+  enablePlugins(BuildInfoPlugin).
+  settings(
+    buildInfoKeys := Seq[BuildInfoKey](
+      name, version, scalaVersion, sbtVersion,
+      "gitRevision" -> "git rev-parse HEAD".!!.trim
+    ),
+    buildInfoPackage := "core"
+  )
+  .enablePlugins(PlayScala)
+
+buildInfoOptions += BuildInfoOption.BuildTime
+
 
 scalaVersion := "2.11.8"
 
