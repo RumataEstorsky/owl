@@ -32,8 +32,8 @@ class OwlTelegramBot @Inject()(conf: play.api.Configuration, taskDAO: TaskDAO)  
     //super.onMessage(message)
   }
 
-  def sendHi: Unit = {
-    request(SendMessage(userId, "Hi-" + System.currentTimeMillis))
+  def sendSimpleMessage(message: String): Unit = {
+    request(SendMessage(userId, message))
     //taskDAO.activeList.map { list => }
   }
 }

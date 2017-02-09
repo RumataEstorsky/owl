@@ -2,9 +2,8 @@ package actors
 
 import javax.inject.Inject
 
-import actors.RemindScheduleActor.{GetClinetToken, SaySomething, SendTimeToClient}
+import actors.RemindScheduleActor.{GetClinetToken, SendTimeToClient}
 import akka.actor._
-import bot.OwlTelegramBot
 import play.api.Logger
 import play.api.cache.CacheApi
 import play.api.libs.json.Json
@@ -22,13 +21,12 @@ object RemindScheduleActor {
 
   case object SendTimeToClient
 
-  case object SaySomething
-
   case class GetClinetToken(token: String)
+
 
 }
 
-class RemindScheduleActor @Inject()(ws: WSClient, conf: play.api.Configuration, cache: CacheApi, bot: OwlTelegramBot) extends Actor {
+class RemindScheduleActor @Inject()(ws: WSClient, conf: play.api.Configuration, cache: CacheApi) extends Actor {
 
   import RemindScheduleActor.CacheKey
 
@@ -36,18 +34,15 @@ class RemindScheduleActor @Inject()(ws: WSClient, conf: play.api.Configuration, 
 
   def receive = {
     case SendTimeToClient => sendAndroid()
-    case SaySomething => bot.sendHi
     case GetClinetToken(token) => {
       val regIds = cache.get[RegIdsType](CacheKey).getOrElse(Set[String]())
       cache.set(CacheKey, regIds + token)
       Logger.info("Added Token from device: " + token)
     }
-
   }
 
   override def preStart() = {
     context.system.scheduler.schedule(0 milliseconds, 60 minutes, self, SendTimeToClient)
-    context.system.scheduler.schedule(0 milliseconds, 5 second, self, SaySomething)
   }
 
 
