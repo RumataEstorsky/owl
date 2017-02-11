@@ -25,8 +25,8 @@
   </appender>
 
   <logger name="play" level="INFO" />
-  <logger name="application" level="DEBUG" />
-  <logger name="slick.jdbc" level="DEBUG"/>
+  <logger name="application" level="INFO" />
+  <logger name="slick.jdbc" level="INFO"/>
   <!--<logger name="com.ning.http.client" level="DEBUG" />-->
   <!--<logger name="play.api.libs.ws" level="DEBUG" />-->
 

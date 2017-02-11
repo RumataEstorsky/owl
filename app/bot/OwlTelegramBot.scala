@@ -12,7 +12,7 @@ import play.api.Logger
 
 @Singleton
 class OwlTelegramBot @Inject()(conf: play.api.Configuration, taskDAO: TaskDAO)  extends TelegramBot with Polling with Commands {
-  def token = conf.getString("bot.token").getOrElse("")
+  def token = conf.getString("bot.token").getOrElse{ Logger.warn("Bot token not found!"); ""}
   lazy val userId = conf.getLong("bot.userId").getOrElse(-1L)
 
   on("/start") { implicit msg => _ =>
