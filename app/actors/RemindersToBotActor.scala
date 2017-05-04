@@ -26,7 +26,7 @@ object RemindersToBotActor {
   case class CheckExecutionJob(reminder: Reminder)
 }
 
-class RemindersToBotActor @Inject()( bot: OwlTelegramBot) extends Actor {
+class RemindersToBotActor @Inject()(bot: OwlTelegramBot) extends Actor {
   override def receive = {
     case SendReminredToBot(reminder) => sendReminredToBot(reminder)
   }
