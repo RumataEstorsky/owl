@@ -1,6 +1,6 @@
 name := """owl"""
 
-version := "0.1.11"
+version := "0.1.12"
 
 lazy val root = (project in file(".")).
   enablePlugins(BuildInfoPlugin).
@@ -16,7 +16,7 @@ lazy val root = (project in file(".")).
 buildInfoOptions += BuildInfoOption.BuildTime
 
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.11"
 
 libraryDependencies ++= Seq(
   jdbc,
