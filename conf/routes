@@ -18,6 +18,7 @@ PATCH         /task/:id/unfreeze               controllers.TaskController.unfree
 PATCH         /task/:id/cost/:cost             controllers.TaskController.setCost(id: Long, cost: Double)
 
 GET           /score/:when                     controllers.TaskController.getScore(when: String)
+# TODO /statistics/days/annual (!!!)
 GET           /statistics/days                 controllers.TaskController.annualStatistics()
 GET           /statistics/diary/:day           controllers.TaskController.statisticsDay(day: String)
 

@@ -47,7 +47,7 @@ class TaskDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
 
   // TODO remove plain sql where it possible
   def annualStatistics = {
-    val q = sql"SELECT * FROM days_productivity ORDER BY day".as[DaysProductivityView]
+    val q = sql"SELECT * FROM days_productivity WHERE day > (now() - INTERVAL '1 year') ORDER BY day".as[DaysProductivityView]
     db.run(q)
   }
 
