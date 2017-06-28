@@ -1,0 +1,9 @@
+#every second|-1|Every second
+every 2 days at 20:00|-1|Run even days
+every day at 7:30,12:30 and 18:30|-1|Eat Vitamins three times in each day
+every day at 8:00 and 23:00|-1|Brush your teeth
+every day at 21:00|-1|Shower
+every day on the weekday at 10:30, 13:30 and 16:30|-1|Sport at work
+every day on the weekday at 12:00 and 15:00|-1|Sport at work
+every day at 22:40|-1|Diary
+every day at 7:00|-1|Shave

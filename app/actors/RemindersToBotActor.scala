@@ -4,11 +4,14 @@ package actors
   * Created by rumata on 09/02/2017.
   */
 
+import java.io.File
+
 import actors.RemindersToBotActor.SendReminredToBot
 import akka.actor.{Actor, Props}
 import bot.OwlTelegramBot
 import com.google.inject.Inject
 import models.Reminder
+import play.api.{Configuration, Logger}
 
 import scala.io.Source
 import scala.concurrent.duration._
@@ -26,7 +29,10 @@ object RemindersToBotActor {
   case class CheckExecutionJob(reminder: Reminder)
 }
 
-class RemindersToBotActor @Inject()(bot: OwlTelegramBot) extends Actor {
+class RemindersToBotActor @Inject()(bot: OwlTelegramBot, conf: Configuration) extends Actor {
+  val logger = Logger(this.getClass)
+  val workspaceDir = new File(conf.getString("workspace.dir").getOrElse("."))
+
   override def receive = {
     case SendReminredToBot(reminder) => sendReminredToBot(reminder)
   }
@@ -36,22 +42,22 @@ class RemindersToBotActor @Inject()(bot: OwlTelegramBot) extends Actor {
     findRemindersFromFile
   }
 
-  def readReminders = Try(Source.fromURL(getClass.getResource("/reminders.txt")).getLines.flatMap {
+  def readReminders = Try(Source.fromFile(workspaceDir + "/workspace/reminders/periodic.txt").getLines.flatMap {
     case l if !l.trim.startsWith("#") && l.count(_ == '|') >= 2 => {
-      val Array(cron, taskId, message) = l.split('|')
-      Some(cron.trim, taskId, message.trim)
+      import cronish.dsl._
+      val Array(schedule, _, message) = l.split('|')
+      Some(Reminder(schedule.cron, message, None))
     }
     case l => None
   }.toList)
 
 
   def findRemindersFromFile = {
-    import cronish.dsl._
-    val raw = readReminders.getOrElse(List[(String, String, String)]())
-    val cancellables = raw.map { case (time, taskId, message) =>
-      val reminder = new Reminder(time.cron, message, None)
+    val raw = readReminders.getOrElse(List[Reminder]())
+    val cancellables = raw.map { reminder =>
       //println(s"$message: next start at ${cron.nextTime} remains ${remains / 1000 / 60} minutes")
       context.system.scheduler.scheduleOnce(reminder.remains.milliseconds, self, SendReminredToBot(reminder))
+      Logger.info(s"added cron-reminder [${reminder.cron}] ${reminder.message}")
     }
     bot.sendSimpleMessage(s"The reminders have been refreshed, loaded ${cancellables.size} item(s).")
   }

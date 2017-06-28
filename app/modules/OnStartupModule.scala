@@ -14,7 +14,7 @@ class OnStartupModule @Inject() extends AbstractModule with AkkaGuiceSupport {
 
   override def configure = {
     bindActor[RemindScheduleActor]("remind-schedule-actor")
-//    bindActor[RemindersToBotActor]("reminders-to-bot-actor")
+    bindActor[RemindersToBotActor]("reminders-to-bot-actor")
     bindActor[ProductivityNotificationsActor]("productivity-notifications-actor")
   }
 
