@@ -13,9 +13,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.util.Random
 
-/**
-  * Created by rumata on 11/04/2017.
-  */
 object ProductivityNotificationsActor {
   case object SendNotificationsAboutForgottenAffairs
   def props = Props[ProductivityNotificationsActor]
