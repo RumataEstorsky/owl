@@ -2,7 +2,7 @@ package dao
 
 import javax.inject.Inject
 
-import models.{DaysProductivityView, Task, TaskStatView}
+import models.{DaysProductivityView, MyDailyAchievementsView, Task, TaskStatView}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
@@ -19,6 +19,11 @@ class TaskDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
 
   def activeTaskStatView(): Future[Seq[TaskStatView]] = {
     val q = sql"""SELECT * FROM tasks_stat ORDER BY ago DESC""".as[TaskStatView]
+    db.run(q)
+  }
+
+  def myDailyAchievementsView(): Future[Seq[MyDailyAchievementsView]] = {
+    val q = sql"""SELECT * FROM my_daily_achievements ORDER BY name DESC""".as[MyDailyAchievementsView]
     db.run(q)
   }
 

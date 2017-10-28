@@ -31,7 +31,9 @@ class ProductivityNotificationsActor @Inject()(conf: Configuration, taskDAO: Tas
   val ticksInDay = WorkHours * 60 / refreshTime.toMinutes
 
   override def receive = {
-    case SendNotificationsAboutForgottenAffairs => sendNotificationsAboutForgottenAffairs()
+    case SendNotificationsAboutForgottenAffairs =>
+      sendNotificationsAboutForgottenAffairs()
+      sendDailyAchievements
   }
 
   override def preStart() = {
@@ -43,6 +45,14 @@ class ProductivityNotificationsActor @Inject()(conf: Configuration, taskDAO: Tas
         bot.sendSimpleMessage(s"Have you forgotten about ${tv.name} already ${tv.daysAgo} days?")
       }
     }
+
+  def sendDailyAchievements() = taskDAO.myDailyAchievementsView().map { achievements =>
+    val text = "You have achieved:\n" +
+    achievements.map{ a =>
+      s"${a.name} ${a.total} times ${a.day} days ago"
+    }.mkString("\n")
+    bot.sendSimpleMessage(text)
+  }
 
   def doItNeedToSendNotification(ts: TaskStatView) = {
     val fac: Int = Math.max((ticksInDay / ts.daysAgo).toInt, 1)

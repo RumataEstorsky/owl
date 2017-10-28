@@ -15,3 +15,10 @@ object  TaskStatView {
   implicit val getTaskStatViewResult = GetResult(r => TaskStatView(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
   implicit val taskStatView: Format[TaskStatView] = Json.format[TaskStatView]
 }
+
+
+case class MyDailyAchievementsView(id: Long, name: String, total: Int, day: String)
+object  MyDailyAchievementsView {
+  implicit val getTaskStatViewResult = GetResult(r => MyDailyAchievementsView(r.<<, r.<<, r.<<, r.<<))
+  implicit val taskStatView: Format[MyDailyAchievementsView] = Json.format[MyDailyAchievementsView]
+}
