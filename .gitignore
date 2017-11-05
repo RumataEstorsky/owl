@@ -14,3 +14,5 @@ target
 /conf/develop.conf
 /docs
 /conf/reminders.txt
+/deploy
+client_secret.json

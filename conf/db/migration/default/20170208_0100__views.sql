@@ -1,38 +1,12 @@
-CREATE OR REPLACE VIEW my_daily_records
+CREATE OR REPLACE VIEW my_records
 AS
   SELECT date_trunc('day', ended_at)::date as day,
-         task_id,
+    task_id,
          SUM(count) AS sum_count,
          SUM(score) AS sum_score
   FROM execs
   GROUP BY day,task_id;
 
-CREATE OR REPLACE VIEW my_daily_achievements
-AS
-SELECT id, name, mc, now()::date - day::date FROM tasks t
-  JOIN (SELECT task_id, MAX(sum_count) AS mc FROM my_daily_records GROUP BY task_id) mr ON t.id = mr.task_id
-  JOIN (SELECT task_id, day, sum_count FROM my_daily_records) as md ON md.sum_count = mr.mc AND md.task_id = mr.task_id
-WHERE NOT is_frozen
-ORDER BY name;
-
-
-
-CREATE OR REPLACE VIEW my_weekly_records
-AS
-  SELECT EXTRACT(YEAR FROM ended_at) || '-' || EXTRACT(WEEK FROM ended_at) as week,
-    task_id,
-         SUM(count) AS sum_count,
-         SUM(score) AS sum_score
-  FROM execs
-  GROUP BY week, task_id;
-
-CREATE OR REPLACE VIEW my_weekly_achievements
-AS
-SELECT id, name, mc, week FROM tasks t
-  JOIN (SELECT task_id, MAX(sum_count) AS mc FROM my_weekly_records GROUP BY task_id) mr ON t.id = mr.task_id
-  JOIN (SELECT task_id, week, sum_count FROM my_weekly_records) as md ON md.sum_count = mr.mc AND md.task_id = mr.task_id
-WHERE NOT is_frozen
-ORDER BY name;
 -------------------------------------------------------------------------
 
 CREATE OR REPLACE VIEW tasks_stat
@@ -51,7 +25,7 @@ AS
     (SELECT task_id,
        MAX(sum_score) AS day_max_score,
        MAX(sum_count) AS day_max_count
-     FROM my_daily_records GROUP BY task_id) maxes ON tasks.id = maxes.task_id
+     FROM my_records GROUP BY task_id) maxes ON tasks.id = maxes.task_id
     LEFT JOIN
     (SELECT task_id, SUM(count) AS today_count
      FROM execs WHERE CAST(ended_at AS date) = CAST(now() AS date)
